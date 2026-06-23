@@ -2,24 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: products
-  labels: { app: products }
 spec:
   replicas: 1
-  selector: { matchLabels: { app: products } }
+  selector:
+    matchLabels:
+      app: products
+
   template:
-    metadata: { labels: { app: products } }
+    metadata:
+      labels:
+        app: products
+
     spec:
+      imagePullSecrets:
+      - name: jfrog-secret
+
       containers:
       - name: products
-        image: hiqodenew.jfrog.io/cicd-docker/new-app/products:v1
-        imagePullPolicy: IfNotPresent
+        image: image_name
         ports:
         - containerPort: 3002
-        readinessProbe:
-          httpGet: { path: /health, port: 3002 }
-          initialDelaySeconds: 3
-          periodSeconds: 10
-        livenessProbe:
-          httpGet: { path: /health, port: 3002 }
-          initialDelaySeconds: 10
-          periodSeconds: 20
